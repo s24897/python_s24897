@@ -1,0 +1,121 @@
+#zad1
+def is_perfect(*args):
+    result = {}
+    for n in args:
+        divisors = []
+        for i in range(1, n):
+            if n % i == 0:
+                divisors.append(i)
+        if sum(divisors) == n:
+            result[n] = True
+        else:
+            result[n] = False
+    return result
+
+
+#zad2
+def catalan_numbers(N, options={'p': False, 'n': False}):
+    if options['p'] and options['n']:
+        print("Options 'p' and 'n' are mutually exclusive.")
+        return
+
+    catalan = [1]
+    for n in range(1, N + 1):
+        cn = 0
+        for k in range(n):
+            cn += catalan[k] * catalan[n - 1 - k]
+        catalan.append(cn)
+
+    start = 0
+    end = N
+
+    if options['p']:
+        start = 2
+        end = N if N % 2 == 0 else N - 1
+    elif options['n']:
+        start = 1
+        end = N if N % 2 == 1 else N - 1
+
+    for i in range(start, end + 1):
+        print(catalan[i])
+
+
+
+#zad3
+def eratosthenes_sieve(n=75):
+    primes = [True] * (n+1)
+    primes[0] = False
+    primes[1] = False
+    for i in range(2, int(n**0.5)+1):
+        if primes[i]:
+            for j in range(i**2, n+1, i):
+                primes[j] = False
+    for i in range(2, n+1):
+        if primes[i]:
+            yield i
+
+#zad4
+def lambda_function(n, ascending=True):
+    numbers = [x for x in range(1, n*5) if x % 2 == 0 and x % 3 != 0]
+    numbers = sorted(numbers)
+    if not ascending:
+        numbers = numbers[::-1]
+    print(numbers[:n])
+
+#zad5
+def dodaj_produkt(baza, nazwa, cena):
+    baza[nazwa] = cena
+
+def usun_produkt(baza, nazwa):
+    del baza[nazwa]
+
+def wyszukaj_produkt(baza, nazwa):
+    if nazwa in baza:
+        return baza[nazwa]
+    else:
+        return None
+
+def wyswietl_baze(baza):
+    print("Baza produktów spożywczych:")
+    for nazwa, cena in baza.items():
+        print(f"{nazwa}: {cena} zł")
+
+# Przykład użycia:
+
+baza = {}
+dodaj_produkt(baza, "chleb", 3.5)
+dodaj_produkt(baza, "mleko", 2.0)
+dodaj_produkt(baza, "jajka", 0.5)
+
+wyswietl_baze(baza)
+
+usun_produkt(baza, "mleko")
+
+wyswietl_baze(baza)
+
+cena_chleba = wyszukaj_produkt(baza, "chleb")
+if cena_chleba is not None:
+    print(f"Cena chleba: {cena_chleba} zł")
+else:
+    print("Produkt nie znaleziony.")
+
+
+
+
+
+
+print(is_perfect(6, 28, 496, 8128, 13, 27))
+
+catalan_numbers(15)
+
+for prime in eratosthenes_sieve():
+    print(prime)
+
+lambda_function(10)
+lambda_function(10, ascending=False)
+
+
+
+
+
+
