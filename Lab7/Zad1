@@ -1,0 +1,48 @@
+#zad1
+class Product:
+    def __init__(self, name, price, quantity):
+        self.name = name
+        self.price = price
+        self.quantity = quantity
+
+class GroceryDatabase:
+    def __init__(self):
+        self.products = []
+
+    def add_product(self, product):
+        self.products.append(product)
+
+    def remove_product(self, product):
+        self.products.remove(product)
+
+    def search_product(self, name):
+        for product in self.products:
+            if product.name == name:
+                return product
+        return None
+
+    def display_products(self):
+        for product in self.products:
+            print(f"{product.name} - {product.price} zł - {product.quantity} sztuk")
+
+        db = GroceryDatabase()
+
+        db.add_product(Product("Chleb", 3.5, 10))
+        db.add_product(Product("Mleko", 2.5, 5))
+        db.add_product(Product("Ser", 5.0, 2))
+
+        db.display_products()
+
+        product = db.search_product("Chleb")
+        if product:
+            print(f"Znaleziono produkt: {product.name}")
+        else:
+            print("Nie znaleziono produktu")
+
+        db.remove_product(product)
+
+        db.display_products()
+
+
+
+
