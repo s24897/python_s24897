@@ -1,0 +1,72 @@
+from heapq import heappop, heappush
+
+class Graph:
+    def __init__(self):
+        self.nodes = set()
+        self.edges = {}
+
+        # dodajemy wagi domyślne dla krawędzi
+        self.weights = {}
+
+    def add_node(self, value):
+        self.nodes.add(value)
+
+    def add_edge(self, from_node, to_node, weight):
+        # dodajemy wagi dla krawędzi
+        self.weights[(from_node, to_node)] = weight
+        self.weights[(to_node, from_node)] = weight
+
+        if from_node in self.edges:
+            self.edges[from_node].append(to_node)
+        else:
+            self.edges[from_node] = [to_node]
+
+    def dijkstra(self, start_node):
+        # inicjalizujemy wszystkie wierzchołki jako nieodwiedzone i nieznane
+        unvisited = {node: float("inf") for node in self.nodes}
+        # ustawiamy wagę startową na 0
+        unvisited[start_node] = 0
+        # inicjalizujemy pustą listę odwiedzonych wierzchołków
+        visited = {}
+        # inicjalizujemy słownik przechowujący ścieżki
+        path = {}
+
+        while unvisited:
+            # wybieramy wierzchołek o najniższej wadze
+            current_node = min(unvisited, key=unvisited.get)
+            # dodajemy ten wierzchołek do listy odwiedzonych
+            visited[current_node] = unvisited[current_node]
+            # usuwamy ten wierzchołek z listy nieodwiedzonych
+            del unvisited[current_node]
+
+            # dla każdego sąsiada wierzchołka aktualizujemy wagę, jeśli znaleźliśmy krótszą ścieżkę
+            for neighbor in self.edges.get(current_node, []):
+                # jeśli sąsiad jest już odwiedzony, to pomijamy go
+                if neighbor in visited:
+                    continue
+                new_weight = visited[current_node] + self.weights[(current_node, neighbor)]
+                if new_weight < unvisited[neighbor]:
+                    unvisited[neighbor] = new_weight
+                    path[neighbor] = current_node
+
+        return visited, path
+
+# przykładowe użycie
+g = Graph()
+g.add_node("A")
+g.add_node("B")
+g.add_node("C")
+g.add_node("D")
+g.add_node("E")
+
+g.add_edge("A", "B", 6)
+g.add_edge("A", "D", 1)
+g.add_edge("B", "D", 2)
+g.add_edge("B", "E", 2)
+g.add_edge("B", "C", 5)
+g.add_edge("C", "E", 5)
+g.add_edge("D", "E", 1)
+
+visited, path = g.dijkstra("A")
+print("Wierzchołki odwiedzone:", visited)
+print("Najkrótsze ścieżki:", path)
