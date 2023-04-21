@@ -1,0 +1,39 @@
+from datetime import date
+
+class Osoba:
+    def __init__(self, imie, nazwisko, plec, data_urodzenia):
+        self.imie = imie
+        self.nazwisko = nazwisko
+        self.plec = plec
+        self.data_urodzenia = data_urodzenia
+
+    def wyswietl_info(self, typ='dict'):
+        if typ == 'dict':
+            return {'Imię': self.imie, 'Nazwisko': self.nazwisko, 'Płeć': self.plec, 'Data urodzenia': str(self.data_urodzenia)}
+        elif typ == 'list':
+            return [self.imie, self.nazwisko, self.plec, str(self.data_urodzenia)]
+        elif typ == 'tuple':
+            return (self.imie, self.nazwisko, self.plec, str(self.data_urodzenia))
+
+    @staticmethod
+    def wyswietl_osoby(osoby):
+        return [osoba.wyswietl_info() for osoba in osoby]
+
+
+class Gracz(Osoba):
+    def __init__(self, imie, nazwisko, plec, data_urodzenia, nick, typ, email):
+        super().__init__(imie, nazwisko, plec, data_urodzenia)
+        self.nick = nick
+        self.typ = typ
+        self.email = email
+
+    def wyswietl_info(self, typ='dict'):
+        info = super().wyswietl_info(typ)
+        info['Nick'] = self.nick
+        info['Typ'] = self.typ
+        info['Email'] = self.email
+        return info
+
+    @staticmethod
+    def wyswietl_graczy(gracze):
+        return [gracz.wyswietl_info() for gracz in gracze]
