@@ -1,0 +1,112 @@
+import math
+import os
+from random import sample
+from string import ascii_letters
+
+#zad1
+def solve_quadratic_equation(a, b, c):
+    delta = b**2 - 4*a*c
+    if delta < 0:
+        print("Rownanie nie ma rozwiazan rzeczywistych.")
+    elif delta == 0:
+        x = -b / (2*a)
+        print(f"Rownanie ma jeden pierwiastek: x = {x:.2f}")
+    else:
+        x1 = (-b + math.sqrt(delta)) / (2*a)
+        x2 = (-b - math.sqrt(delta)) / (2*a)
+        print(f"Rownanie ma dwa pierwiastki: x1 = {x1:.2f}, x2 = {x2:.2f}")
+
+def get_coefficients():
+    a = float(input("Podaj wspolczynnik a: "))
+    b = float(input("Podaj wspolczynnik b: "))
+    c = float(input("Podaj wspolczynnik c: "))
+    return a, b, c
+
+def main():
+    a, b, c = get_coefficients()
+    solve_quadratic_equation(a, b, c)
+
+if __name__ == '__main__':
+    main()
+
+
+#zad2
+def signum(x):
+    if x > 0:
+        return 1
+    elif x < 0:
+        return -1
+    else:
+        return 0
+
+x = float(input("Podaj liczbę: "))
+print(f"signum({x}) = {signum(x)}")
+
+
+
+#zad3
+def dodawanie(a, b):
+    return a + b
+
+def odejmowanie(a, b):
+    return a - b
+
+def mnozenie(a, b):
+    return a * b
+
+def dzielenie(a, b):
+    return a / b
+
+while True:
+    print("Menu kalkulatora:")
+    print("1. Dodawanie")
+    print("2. Odejmowanie")
+    print("3. Mnożenie")
+    print("4. Dzielenie")
+    print("0. Wyjście")
+
+    wybor = int(input("Wybierz opcję z menu: "))
+
+    if wybor == 0:
+        break
+
+    a = float(input("Podaj pierwszą liczbę: "))
+    b = float(input("Podaj drugą liczbę (różną od zera w przypadku dzielenia): "))
+
+    if wybor == 1:
+        wynik = dodawanie(a, b)
+    elif wybor == 2:
+        wynik = odejmowanie(a, b)
+    elif wybor == 3:
+        wynik = mnozenie(a, b)
+    elif wybor == 4:
+        if b == 0:
+            print("Nie można dzielić przez zero!")
+            continue
+        wynik = dzielenie(a, b)
+    else:
+        print("Nieprawidłowa opcja z menu!")
+        continue
+
+    print(f"Wynik: {wynik}")
+
+
+    #zad4
+
+
+    path = os.path.expanduser("~/Pobrane")
+
+    print(f"Zawartość folderu {path}:")
+    for item in os.listdir(path):
+        item_path = os.path.join(path, item)
+        if os.path.isfile(item_path):
+            print(f"- {item} (plik)")
+        elif os.path.isdir(item_path):
+            print(f"- {item} (folder)")
+
+#zad5
+
+letters = ''.join(sample(ascii_letters, 5))
+print(letters)
+
+
