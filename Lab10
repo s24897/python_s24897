@@ -1,0 +1,96 @@
+#zad1
+import re
+
+raw_text = "Wyślij email na adres: info@template.com lub sales-info@template.it"
+
+pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b'
+
+emails = re.findall(pattern, raw_text)
+
+print(emails)
+
+#zad2
+import re
+
+text = 'Programowanie w języku Python - od A do Z'
+
+result = re.split(r'\s', text)
+
+print(result)
+
+#zad3
+import string
+
+letters = string.ascii_lowercase + string.ascii_uppercase
+
+print(letters)
+
+#zad4
+from collections import Counter
+
+items = ['YES', 'NO', 'NO', 'YES', 'EMPTY', 'YES', 'NO']
+
+counter = Counter(items)
+
+print(counter)
+
+#zad5
+import random
+
+items = ['python', 'java', 'sql', 'c++', 'c']
+
+random.seed(12)
+
+random_item = random.choice(items)
+
+print(random_item)
+
+#zad6
+import random
+
+items = ['python', 'java', 'sql', 'c++', 'c']
+
+random.seed(15)
+
+random.shuffle(items)
+
+print(items)
+
+#zad7
+import pickle
+
+ids = ['001', '003', '011']
+
+with open('data.pickle', 'wb') as file:
+    pickle.dump(ids, file)
+
+#zad8
+import json
+
+stocks = {'PLW': 360.0, 'TEN': 320.0, 'CDR': 329.0}
+
+json_string = json.dumps(stocks, sort_keys=True, indent=4)
+
+print(json_string)
+
+#zad9
+import math
+
+def miles_to_kilometers(miles):
+    return miles * 1.60934
+
+def kilometers_to_miles(kilometers):
+    return kilometers / 1.60934
+
+def degrees_to_radians(degrees):
+    return math.radians(degrees)
+
+def radians_to_degrees(radians):
+    return math.degrees(radians)
+
+
+
+
+
+
+
