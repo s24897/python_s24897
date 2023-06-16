@@ -1,0 +1,163 @@
+import os
+import sys
+
+class KNNAlg:
+    def __init__(self, test, train, distance):
+        self.test = test
+        self.train = train
+        self.distance = distance
+
+    def get_distance(self):
+        return self.distance
+
+    def get_test(self):
+        return self.test
+
+    def get_train(self):
+        return self.train
+
+    @staticmethod
+    def calculate_distance(iris1, iris2):
+        distance_between_two_factors = 0
+        for i in range(len(iris1.get_vectors())):
+            distance_between_two_factors += (iris1.get_vectors()[i] - iris2.get_vectors()[i]) ** 2
+        return distance_between_two_factors
+
+    @staticmethod
+    def knn_algorithm(test_list, train_list, k_parameter):
+        compatible_vectors = 0
+        max_index = 0
+        answ = ""
+        temp_test = []
+        temp_train = []
+
+        for i in range(len(test_list)):
+            temp_test.append(test_list[i])
+            distance = []
+            for j in range(len(train_list)):
+                temp_train.append(train_list[j])
+                distance.append(KNNAlg(temp_test[i], temp_train[j], KNNAlg.calculate_distance(temp_test[i], temp_train[j])))
+            distance.sort(key=lambda x: x.distance)
+            compatible_vectors = 0
+            string_list = []
+            unique_string_list = set()
+
+            for j in range(k_parameter):
+                if distance[j].get_train().get_iris_name() == temp_test[i].get_iris_name():
+                    compatible_vectors += 1
+                string_list.append(distance[j].get_train().get_iris_name())
+                unique_string_list.add(distance[j].get_train().get_iris_name())
+
+            max_index = 0
+            for iris_name in unique_string_list:
+                temp = 0
+                for j in range(len(string_list)):
+                    if iris_name == string_list[j]:
+                        temp += 1
+                if temp > max_index:
+                    max_index = temp
+                    answ = iris_name
+
+            accuracy = (compatible_vectors / k_parameter) * 100
+            o = f"Accuracy: {accuracy:.3f}"
+            print("Odpowiedz wedlug algorytmu KNN:", answ)
+            print("Poprawna odpowiedz:", temp_test[i].get_iris_name())
+            print("Trafnosc algorytmu:", o + "%")
+            print()
+
+class Iris:
+    def __init__(self, vectors, iris_name):
+        self.vectors = vectors
+        self.iris_name = iris_name
+
+    def get_vectors(self):
+        return self.vectors
+
+    def get_iris_name(self):
+        return self.iris_name
+
+class FileUtils:
+    @staticmethod
+    def get_iris_list(file_name):
+        file_path = os.path.join("Data", file_name)
+        with open(file_path, "r") as file:
+            iris_list = []
+            for line in file:
+                line = line.strip()
+                iris_data = line.split(";")
+                vectors = [float(x) for x in iris_data[:-1]]
+                iris_list.append(Iris(vectors, iris_data[-1]))
+            return iris_list
+
+def main():
+    training_iris_list = None
+    testing_iris_list = None
+
+    # podawanie parametru k
+    print("Podaj parametr K: ")
+    k = 0
+    done = False
+    while not done:
+        try:
+            k = int(input())
+            done = True
+        except ValueError:
+            print("Niepoprawne dane!!! Wprowadz liczbe calkowita")
+
+    # podawanie pliku treningowego
+    print("Podaj nazwe pliku z danymi treningowymi: ")
+    training_file_name = ""
+    done = False
+    while not done:
+        try:
+            training_file_name = input()
+            training_iris_list = FileUtils.get_iris_list(training_file_name)
+            done = True
+        except FileNotFoundError:
+            print("Niepoprawna nazwa pliku. Upewnij sie ze podana nazwa jest poprawna i plik znajduje sie w folderze \"Data\"")
+
+    print("Wybierz opcje: ")
+    print("1.Skorzystaj z pliku z danymi testowymi")
+    print("2.Wprowadz wartosci testowane recznie")
+    choice = 0
+    done = False
+    while not done:
+        try:
+            while choice < 1 or choice > 2:
+                print("Podaj swoj wybor: ")
+                choice = int(input())
+                done = True
+        except ValueError:
+            print("Niewlasciwa wartosc. Podaj swoj wybor jeszcze raz")
+
+    if choice == 1:
+        # podawanie pliku testowego
+        print("Podaj nazwe pliku z danymi testowymi: ")
+        testing_file_name = ""
+        done = False
+        while not done:
+            try:
+                testing_file_name = input()
+                testing_iris_list = FileUtils.get_iris_list(testing_file_name)
+                done = True
+            except FileNotFoundError:
+                print("Niepoprawna nazwa pliku. Upewnij sie ze podana nazwa jest poprawna i plik znajduje sie w folderze \"Data\"")
+        KNNAlg.knn_algorithm(testing_iris_list, training_iris_list, k)
+    else:
+        while True:
+            iris_array_list = []
+            console_iris_parameters = []
+            print("Podaj parametry wektora oddzielone znakiem \";\", lub wpisz \"END\" aby zakonczyc podawanie wektorow")
+            iris_parameters = input()
+            if iris_parameters.upper() == "END":
+                break
+            else:
+                temp = iris_parameters.split(";")
+                for i in range(len(temp) - 1):
+                    console_iris_parameters.append(float(temp[i]))
+                iris_array_list.append(Iris(console_iris_parameters, temp[-1]))
+                testing_iris_list = iris_array_list
+                KNNAlg.knn_algorithm(testing_iris_list, training_iris_list, k)
+
+if __name__ == "__main__":
+    main()
